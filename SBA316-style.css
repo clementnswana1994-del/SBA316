@@ -1,29 +1,27 @@
-* {
-  box-sizing: border-box;
-}
-
-/* CSS Custom Properties */
-:root {
-  --main-bg: #613a23;
-  --top-menu-bg: #0e9aa7;
-  --sub-menu-bg: #3da4ab;
-}
 body {
-  font-family: Tahoma, Geneva, sans-serif;
-  height: 100vh;
-  margin: 0;
-  display: grid;
-  grid-template-rows: 3rem auto;
-  color: white;
-}
-.flex-ctr {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    --nav-width: 200px;
+    margin: 0 0 0 var(--nav-width);
+    font-family: 'Quicksand', sans-serif;
+    font-size: 18px;
 }
 
-.flex-around {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+.nav {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: var(--nav-width);
+    height: 100vh;
+    background: #222222;
+}
+
+.nav__link {
+    display: block;
+    padding: 12px 18px;
+    text-decoration: none;
+    color: #eeeeee;
+    font-weight: 500;
+}
+
+.nav__link:hover {
+    background: rgba(255, 255, 255, 0.05);
 }
