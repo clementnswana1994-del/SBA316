@@ -1,87 +1,71 @@
-export default class extends AbstractView {
-    constructor() {
-        super();
-        this.setTitle("Dashboard");
-    }
-    
-    async getHtml() {
-        return `
-           <h1>Welcome back, Home</h1>
-           <p>
-               Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-               Quisque rutrum libero non elementum commodo. Pellentesque eget egestas tellus.
-               Vestibulum pellentesque finibus dolor, id euismod odio viverra et. Vivamus congue
-               consectetur pharetra. Fusce id porta magna. In sagittis malesuada enim at
-               rutrum. Ut fringilla ligula interdum mauris maximus, sed accumsan sapien
-               placerat. Duis id nisl vel nulla rutrum sollicitudin ac sit amet tellus.
-               Nam rutrum aliquam placerat. Curabitur tempor, turpis vitae bibendum
-               finibus, nibh augue ultricies tellus, nec porta mauris nisl id mauris.
-               Pellentesque sit amet risus id ipsum semper ultricies non in ipsum.
-            </p>
-            <p>
-               <a href="/posts" data-link>View recent posts</a>
-            </p>
-        `;
-    }
-};
+const textarea = document.querySelector('textarea')
+const addBtn = document.getElementById('addBtn')
+const todoContainer = document.querySelector('.todoContainer')
 
-export default class {
-     constructor() {
- }
 
- setTitle(title) {
-     document.title = title;
- }
- async getHtml() {
-     return "";
-   }
- }
+let todoList = []
 
-const navigateTo = url => {
-    history.pushState(null, null, url);
-    router();
-};
+function intiaLoad() {
+  if (!localStorage.getItem('todos')) { return }
+  //todoList = JSON.parse(localStorage.getItem('todo')).todoList
+  updateUI()
+}
 
-const router = async () => {
-  const routes = [
-    { path: "/", view: Dashboard },
-    //{ path: "/posts", view: () => console.log("viewing Posts") },
-    //{ path: "/settings", view: () => console.log("viewing Settings") },
-  ];
+intiaLoad()
 
-  // test each route for potenial match
-  const potenialMatches = routes.map(route => {
-    return {
-      route: route,
-      isMatch: location.pathname === route.path
-    };
- });
-  
-  let match = potenialMatches.find(potenialMatch => potenialMatch.isMatch);
+function addTodo() {
+  const todo = textarea.value
+  if (!todo) { return }
 
-  if (!match) {
-    match = {
-        route: routes[0],
-        isMatch: true
-    }
-  }
-  const view = new match.route.view();
+  console.log('Added todo: ', todo)
+  todoList.push(todo)
+  textarea.value = '' // reset to empty
+  updateUI()
+}
 
-  document.querySelector("#app").innerHTML = await view.getHtml();
+function editTodo(index) {
+  textarea.value = todoList[index]
+  textarea.value = todoList.filter((element, elementIndex) => {
+    if (index === elementIndex) { return false}
+    return true
+  })
+  updateUI()
+}
 
-  console.log(match.route.view());
-};
+function deleteTodo(index) {
+  todoList = todoList.filter((element, elementIndex) => {
+    if (index === elementIndex) { return false}
+    return true
+  })
+  updateUI()
+}
 
-//windon.addEventListener("popstate", router);
+function updateUI() {
+    let newInnerHTML = ''
 
-document.addEventListener("DOMContentLoaded", () => {
-    document.body.addEventListener("click", e => {
-        if (e.target.matches("[data-link]")) {
-           e.preventDefault();
-           navigateTo(e.target.href); 
-        }
-    });
-  
-    router();
-});
+    todoList.forEach((todoElement, todoIndex) => {
+      newInnerHTML += `
+      <div class="todo">
+      <p>${todoElement}</p>
+      <div class="btnConstainer">
+          <button class="iconBtn" "onclick="editTodo(${todoIndex})">
+            <i class="fa-soild fa-pen-to-square"></i>
+          </button>
+          <button class="iconBtn" "onclick="deleteTodo(${todoIndex})">
+            <i class="fa-soild fa-xmark"></i>
+          </button>
+      </div>
+    </div>
+        `
+    })
 
+    todoContainer.innerHTML = newInnerHTML
+
+    // to save to localstorage
+    localStorage.setItem('todos', JSON.stringify({ todoList }))
+}
+
+addBtn.addEventListener('click', addTodo)
+
+
+ 
