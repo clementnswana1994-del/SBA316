@@ -12,10 +12,7 @@ form.addEventListener('submit', (e) => {
     // If we have a firstname input then we are in the signup
     errors = getSignupFormErrors(name_input.value, email_input.value, password_input.value, repeat_password_input.value)
   }
-  // else{
-  //   // If we don't have a firstname input then we are in the login
-  //   errors = getLoginFormErrors(email_input.value, password_input.value)
-  // }
+  
 
   if(errors.length > 0){
     // If there are any errors
@@ -53,20 +50,8 @@ function getSignupFormErrors(name, email, password, repeatPassword){
   return errors;
 }
 
-// function getLoginFormErrors(email, password){
-//   let errors = []
-
-//   if(email === '' || email == null){
-//     errors.push('Email is required')
-//     email_input.parentElement.classList.add('incorrect')
-//   }
-//   if(password === '' || password == null){
-//     errors.push('Password is required')
-//     password_input.parentElement.classList.add('incorrect')
-//   }
-
-//   return errors;
-// }
+const signupForm = document.querySelector('#signupForm');
+        signupForm.addEventListener('submit', handleSignupSubmission);
 
 const allInputs = [name_input, email_input, password_input, repeat_password_input].filter(input => input != null)
 
@@ -78,3 +63,19 @@ allInputs.forEach(input => {
     }
   })
 })
+
+
+const newDiv = document.createElement('div');
+
+// Create a text node to add content to the div
+const textContent = document.createTextNode('This is a dynamically created div!');
+
+// Append the text node to the new div
+newDiv.appendChild(textContent);
+
+// (Optional) Add an ID or class to the new div
+newDiv.id = 'myDynamicDiv';
+newDiv.classList.add('dynamic-element');
+
+// Append the new div to the document body
+document.body.appendChild(newDiv);
