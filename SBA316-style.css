@@ -17,7 +17,7 @@ html{
 }
 body{
   min-height: 100vh;
-  background-image: url(background.jpg);
+  background-image: url(background1.jpg.jpg);
   background-size: cover;
   background-position: right;
   overflow: hidden;
@@ -133,5 +133,5 @@ form div.incorrect input{
   border-color: #f06272;
 }
 #error-message{
-  color:#f06272;
+  color:#df3e51;
 }
