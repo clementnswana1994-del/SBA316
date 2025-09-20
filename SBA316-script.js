@@ -3,21 +3,27 @@ const name_input = document.getElementById('name-input')
 const email_input = document.getElementById('email-input')
 const password_input = document.getElementById('password-input')
 const repeat_password_input = document.getElementById('repeat-password-input')
-const error_message = document.getElementById('error-message')
+// const successMessageElement = document.getElementById('signup-success');
+//     successMessageElement.textContent = 'Welcome, your account has been created!';
+ const error_message = document.getElementById('error-message')
+        //error_message.textContent = 'Name is required. Email is required. Password is required. Password must have at least 8 characters'
 
 form.addEventListener('submit', (e) => {
   let errors = []
 
-  if(name_input){
+  if(firstname_input){
     // If we have a firstname input then we are in the signup
-    errors = getSignupFormErrors(name_input.value, email_input.value, password_input.value, repeat_password_input.value)
+    errors = getSignupFormErrors(firstname_input.value, email_input.value, password_input.value, repeat_password_input.value)
   }
-  
+  else{
+    // If we don't have a firstname input then we are in the login
+    errors = getLoginFormErrors(email_input.value, password_input.value)
+  }
 
   if(errors.length > 0){
     // If there are any errors
     e.preventDefault()
-    error_message.innerText  = errors.join(". ")
+    error_message.textContentxt  = errors.join(". ")
   }
 })
 
