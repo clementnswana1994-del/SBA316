@@ -1,71 +1,80 @@
-const textarea = document.querySelector('textarea')
-const addBtn = document.getElementById('addBtn')
-const todoContainer = document.querySelector('.todoContainer')
+const form = document.getElementById('form')
+const firstname_input = document.getElementById('firstname-input')
+const email_input = document.getElementById('email-input')
+const password_input = document.getElementById('password-input')
+const repeat_password_input = document.getElementById('repeat-password-input')
+const error_message = document.getElementById('error-message')
+
+form.addEventListener('submit', (e) => {
+  let errors = []
+
+  if(firstname_input){
+    // If we have a firstname input then we are in the signup
+    errors = getSignupFormErrors(firstname_input.value, email_input.value, password_input.value, repeat_password_input.value)
+  }
+  else{
+    // If we don't have a firstname input then we are in the login
+    errors = getLoginFormErrors(email_input.value, password_input.value)
+  }
+
+  if(errors.length > 0){
+    // If there are any errors
+    e.preventDefault()
+    error_message.innerText  = errors.join(". ")
+  }
+})
+
+function getSignupFormErrors(firstname, email, password, repeatPassword){
+  let errors = []
+
+  if(firstname === '' || firstname == null){
+    errors.push('Firstname is required')
+    firstname_input.parentElement.classList.add('incorrect')
+  }
+  if(email === '' || email == null){
+    errors.push('Email is required')
+    email_input.parentElement.classList.add('incorrect')
+  }
+  if(password === '' || password == null){
+    errors.push('Password is required')
+    password_input.parentElement.classList.add('incorrect')
+  }
+  if(password.length < 8){
+    errors.push('Password must have at least 8 characters')
+    password_input.parentElement.classList.add('incorrect')
+  }
+  if(password !== repeatPassword){
+    errors.push('Password does not match repeated password')
+    password_input.parentElement.classList.add('incorrect')
+    repeat_password_input.parentElement.classList.add('incorrect')
+  }
 
 
-let todoList = []
-
-function intiaLoad() {
-  if (!localStorage.getItem('todos')) { return }
-  //todoList = JSON.parse(localStorage.getItem('todo')).todoList
-  updateUI()
+  return errors;
 }
 
-intiaLoad()
+function getLoginFormErrors(email, password){
+  let errors = []
 
-function addTodo() {
-  const todo = textarea.value
-  if (!todo) { return }
+  if(email === '' || email == null){
+    errors.push('Email is required')
+    email_input.parentElement.classList.add('incorrect')
+  }
+  if(password === '' || password == null){
+    errors.push('Password is required')
+    password_input.parentElement.classList.add('incorrect')
+  }
 
-  console.log('Added todo: ', todo)
-  todoList.push(todo)
-  textarea.value = '' // reset to empty
-  updateUI()
+  return errors;
 }
 
-function editTodo(index) {
-  textarea.value = todoList[index]
-  textarea.value = todoList.filter((element, elementIndex) => {
-    if (index === elementIndex) { return false}
-    return true
+const allInputs = [firstname_input, email_input, password_input, repeat_password_input].filter(input => input != null)
+
+allInputs.forEach(input => {
+  input.addEventListener('input', () => {
+    if(input.parentElement.classList.contains('incorrect')){
+      input.parentElement.classList.remove('incorrect')
+      error_message.innerText = ''
+    }
   })
-  updateUI()
-}
-
-function deleteTodo(index) {
-  todoList = todoList.filter((element, elementIndex) => {
-    if (index === elementIndex) { return false}
-    return true
-  })
-  updateUI()
-}
-
-function updateUI() {
-    let newInnerHTML = ''
-
-    todoList.forEach((todoElement, todoIndex) => {
-      newInnerHTML += `
-      <div class="todo">
-      <p>${todoElement}</p>
-      <div class="btnConstainer">
-          <button class="iconBtn" "onclick="editTodo(${todoIndex})">
-            <i class="fa-soild fa-pen-to-square"></i>
-          </button>
-          <button class="iconBtn" "onclick="deleteTodo(${todoIndex})">
-            <i class="fa-soild fa-xmark"></i>
-          </button>
-      </div>
-    </div>
-        `
-    })
-
-    todoContainer.innerHTML = newInnerHTML
-
-    // to save to localstorage
-    localStorage.setItem('todos', JSON.stringify({ todoList }))
-}
-
-addBtn.addEventListener('click', addTodo)
-
-
- 
+})
